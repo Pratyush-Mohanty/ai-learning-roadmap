@@ -1,27 +1,27 @@
-# AI / LLM / System Design / GCP — Learning Roadmap
+# AI / LLM / System Design / GCP — Advanced Learning Repository
 
-A curated, **deduplicated** resource collection and phased roadmap for a **Data Engineer (4 years experience)** moving into AI Engineering, System Design, and Google Cloud.
+A content-rich, **deduplicated** learning repo for a **Data Engineer (4 yrs)** moving into AI Engineering, System Design, and Google Cloud.
 
-## Who this is for
-- 4 years of data engineering experience (SQL, pipelines, warehousing assumed)
-- Goal: AI Engineering + Google Cloud (Data & Cloud Engineer) + System Design
-- Prefers GitHub resources and free/curated material
+This is not a link list. Every file teaches the concepts **directly** — definitions, tradeoffs, architecture decisions, patterns, and gotchas — with a short "go deeper" link section at the end of each file.
 
-## Philosophy
-- **One resource, one home.** Each resource appears once; no redundant lists.
-- **Learn → Build → Ship.** Every phase ends with a hands-on project.
-- **Most leverage first.** Prioritize techniques with the highest impact.
+## Repository Map
 
-## The 6 Phases at a Glance
-
-| Phase | Focus | Where |
+| File | What it covers | Level |
 |---|---|---|
-| 0 | Cloud Foundations (GCP) | [resources/07-gcp-cloud-engineering.md](resources/07-gcp-cloud-engineering.md) |
-| 1 | AI / LLM Fundamentals | [resources/02-ai-llm-fundamentals.md](resources/02-ai-llm-fundamentals.md) |
-| 2 | System Design | [resources/01-system-design.md](resources/01-system-design.md) |
-| 3 | LLM Engineering (RAG, apps, LLMOps) | [resources/03-llm-engineering.md](resources/03-llm-engineering.md) |
-| 4 | GCP Data Engineering | [resources/06-gcp-data-engineering.md](resources/06-gcp-data-engineering.md) |
-| 5 | Advanced (optimization + agents) | [resources/04-llm-optimization.md](resources/04-llm-optimization.md) · [resources/05-agent-architectures.md](resources/05-agent-architectures.md) |
+| [ROADMAP.md](ROADMAP.md) | 6-phase learning plan with weekly cadence and projects | All |
+| [topics/01-system-design.md](topics/01-system-design.md) | Scalability, CAP, consistency, storage engines, caching, load balancing, tradeoff-driven design | Intermediate |
+| [topics/02-ai-llm-fundamentals.md](topics/02-ai-llm-fundamentals.md) | Transformers, tokens, attention, pre-training, fine-tuning, RLHF, eval | Foundation |
+| [topics/03-llm-engineering.md](topics/03-llm-engineering.md) | RAG pipeline anatomy, chunking, retrieval, reranking, LLMOps, cost control | Core |
+| [topics/04-ai-agents-advanced.md](topics/04-ai-agents-advanced.md) | Agent loop, tool design, memory systems, multi-agent orchestration, guardrails, protocols (A2A/MCP), eval | Advanced |
+| [topics/05-llm-optimization.md](topics/05-llm-optimization.md) | Continuous batching, PagedAttention, KV cache, quantization (FP8/INT4), speculative decoding, parallelism | Advanced |
+| [topics/06-cloud-data-engineering-advanced.md](topics/06-cloud-data-engineering-advanced.md) | Cloud compute/networking/storage, data lakehouse, streaming, CDC, dbt, orchestration, governance | Advanced |
+| [topics/07-gcp-data-engineering.md](topics/07-gcp-data-engineering.md) | BigQuery internals, BigLake + Iceberg, Dataflow/Beam, Pub/Sub, Composer, Bigtable vs Spanner, Vertex AI | Advanced |
+| [topics/08-gcp-cloud-engineering.md](topics/08-gcp-cloud-engineering.md) | GCP compute, networking, IAM, Terraform, Cloud Run/GKE, cost management | Intermediate |
+| [projects/](projects/) | Hands-on projects per phase | All |
 
-Full sequencing, weeks, and milestones: **[ROADMAP.md](ROADMAP.md)**
-Hands-on projects for every phase: **[projects/project-ideas.md](projects/project-ideas.md)**
+## Core Principles
+
+1. **One resource, one home.** Each concept appears once; cross-referenced by link.
+2. **Learn → Build → Ship.** Every phase ends with a deployable project.
+3. **Most leverage first.** Highest-impact techniques (e.g., continuous batching ≈ 23x throughput) before micro-optimizations.
+4. **Understand tradeoffs, not just names.** The skill is choosing between options under constraints.
