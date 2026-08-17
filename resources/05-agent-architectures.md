@@ -2,29 +2,41 @@
 
 How to design reliable multi-agent systems — the hardest and most in-demand area in 2026.
 
-## Framework: one primary
-- `langchain-ai/langgraph` — stateful, checkpointed agent graphs. The production standard. Learn this first.
+## Primary Framework
+- **LangGraph** — https://github.com/langchain-ai/langgraph
+  Stateful, checkpointed agent graphs. The production standard. Learn this first.
 
-## Reference patterns (the 2026 taxonomy)
-**Google's 8 patterns:** sequential, parallel, loop/critic, hierarchical, supervisor/worker, peer-to-peer, marketplace, human-in-the-loop (in / on the loop)
-- Azure Architecture Center: **AI Agent Orchestration Patterns** — sequential, concurrent, group chat, handoff, magentic
-- `baeseokjae.github.io` multi-agent design guide — state management, fault tolerance, cost engineering, observability
+## Reference Patterns (the 2026 taxonomy)
+**Google's 8 patterns:** sequential, parallel, loop/critic, hierarchical, supervisor/worker, peer-to-peer, marketplace, human-in-the-loop (in/on the loop)
+
+- **Azure Architecture Center: AI Agent Orchestration Patterns** — https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns
+  Sequential, concurrent, group chat, handoff, magentic patterns.
+- **Multi-Agent System Design Guide** — https://baeseokjae.github.io/posts/multi-agent-system-design-guide-2026/
+  State management, fault tolerance, cost engineering, observability.
 
 ## GitHub (learn by example)
-- `microsoft/autogen` — multi-agent conversations with human-in-the-loop
-- `crewAIInc/crewAI` — role-based agent teams (simple)
-- `FoundationAgents/MetaGPT` — SOP-driven software company simulation (advanced)
-- `balakumardev/ai-agent-design-patterns` — 8 production patterns with runnable LangGraph code
-- `panaversity/learn-agentic-ai` — cloud-native agentic AI on Kubernetes + Dapr
-- `google/A2A` — agent-to-agent protocol (interop)
-- `modelcontextprotocol/servers` — MCP: agent-to-tools standard
-- `masamasa59/ai-agent-papers` — biweekly curated agent research papers (stay current)
+- **AutoGen** — https://github.com/microsoft/autogen
+  Multi-agent conversations with human-in-the-loop.
+- **CrewAI** — https://github.com/crewAIInc/crewAI
+  Role-based agent teams (simple entry point).
+- **MetaGPT** — https://github.com/FoundationAgents/MetaGPT
+  SOP-driven software company simulation (advanced).
+- **AI Agent Design Patterns** — https://github.com/balakumardev/ai-agent-design-patterns
+  8 production patterns with runnable LangGraph code.
+- **Learn Agentic AI** — https://github.com/panaversity/learn-agentic-ai
+  Cloud-native agentic AI on Kubernetes + Dapr.
+- **Agent2Agent (A2A) Protocol** — https://github.com/google/A2A
+  Agent-to-agent communication standard.
+- **MCP Servers** — https://github.com/modelcontextprotocol/servers
+  Model Context Protocol: agent-to-tools standard.
+- **AI Agent Papers** — https://github.com/masamasa59/ai-agent-papers
+  Biweekly curated agent research papers. Stay current.
 
 ## Research (depth)
-- Survey: *Agentic AI: A Comprehensive Survey of Architectures* (arXiv 2510.25445)
-- IEEE: *AI Agents: Review of Evolution, Architectures, Applications*
+- **Agentic AI: Comprehensive Survey of Architectures** — https://arxiv.org/abs/2510.25445
+- **AI Agents: Review of Evolution, Architectures, Applications** — https://ieeexplore.ieee.org/document/11241897
 
-## Key production concepts
+## Key Production Concepts
 - **Tool design** drives reliability more than model choice — bad tools = agent failures
 - Memory systems (short-term, long-term, vector + knowledge graphs)
 - Cost-aware model routing (cheap model for simple tasks, frontier for hard)

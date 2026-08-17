@@ -3,18 +3,26 @@
 Theoretical foundation. Keep this phase short — go deep only if you want the math.
 
 ## Start Here (free, fast)
-- DeepLearning.AI — **LLM Engineering for Everyone** (~1hr, free). Skip if you already grasp tokens/embeddings/attention at a high level.
-- **Karpathy's *Neural Networks: Zero to Hero*** (YouTube) — transformers from first principles, if you want the real math
+- **DeepLearning.AI — LLM Engineering for Everyone** — https://www.deeplearning.ai/short-courses/llm-engineering-for-everyone/
+  ~1 hr, free. Skip if you already grasp tokens/embeddings/attention at a high level.
+- **Karpathy: Neural Networks: Zero to Hero** — https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ
+  Transformers from first principles, if you want the real math.
 
 ## Courses
-- Coursera: **Generative AI with LLMs** (DeepLearning.AI + AWS) — fine-tuning, RLHF, deployment
-- Google Cloud: *Introduction to LLMs* (Coursera) — clear conceptual explanation without jargon
+- **Generative AI with LLMs** (DeepLearning.AI + AWS, Coursera) — https://www.coursera.org/learn/generative-ai-with-llms
+  Fine-tuning, RLHF, deployment. One course, high signal-to-noise.
+- **Google Cloud: Introduction to Large Language Models** — https://www.coursera.org/learn/introduction-to-large-language-models
+  Clear conceptual explanation: tokenization, embeddings, training dynamics, inference.
 
 ## GitHub (learn by building)
-- `github.com/rasbt/LLMs-from-scratch` — build a ChatGPT-like LLM in PyTorch step by step (deepest hands-on)
-- `github.com/mlabonne/llm-course` — roadmap: fundamentals → RAG → fine-tuning with Colab notebooks
-- `github.com/dair-ai/Prompt-Engineering-Guide` — prompt engineering reference (learn once)
-- `github.com/Hannibal046/Awesome-LLM` — curated papers, courses, benchmarks (use as index)
+- **Build a Large Language Model (From Scratch)** — https://github.com/rasbt/LLMs-from-scratch
+  Build a ChatGPT-like LLM in PyTorch step by step. Deepest hands-on.
+- **LLM Course** — https://github.com/mlabonne/llm-course
+  Roadmap: fundamentals → RAG → fine-tuning with Colab notebooks.
+- **Prompt Engineering Guide** — https://github.com/dair-ai/Prompt-Engineering-Guide
+  Prompt engineering reference. Learn once, then move on.
+- **Awesome-LLM** — https://github.com/Hannibal046/Awesome-LLM
+  Index of seminal papers, courses, benchmarks. Use as a map, not a book.
 
 ## Concepts to master
 - Tokenization, embeddings, attention, transformer architecture

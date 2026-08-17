@@ -3,9 +3,9 @@
 Every phase ends with a deployable project. Start small, ship, then extend.
 
 ## Phase 0 — Cloud Foundations
-- [x] Deploy a batch pipeline: Cloud Storage → BigQuery, orchestrated with Cloud Composer
+- [ ] Deploy a batch pipeline: Cloud Storage → BigQuery, orchestrated with Cloud Composer
 
-## Phase 1 — AI/LLM Foundations
+## Phase 1 — AI/LLM Fundamentals
 - [ ] Notebook: call an LLM API, extract structured JSON, handle rate limits/retries, log cost
 - [ ] Optional: fine-tune a small model on your own dataset (LlamaFactory)
 
@@ -26,7 +26,7 @@ Every phase ends with a deployable project. Start small, ship, then extend.
 - [ ] Serve an LLM with vLLM; apply FP8 quantization + speculative decoding; measure before/after
 - [ ] Supervisor/worker multi-agent system in LangGraph with checkpointing + observability
 
-## Portfolio tips
+## Portfolio Tips
 - Put every project on GitHub with a README, architecture diagram, and demo
 - One strong project per phase beats five half-finished ones
 - Teaching (write a post per project) consolidates learning

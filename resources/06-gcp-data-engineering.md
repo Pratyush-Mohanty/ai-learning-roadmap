@@ -2,21 +2,26 @@
 
 Core services: BigQuery, Dataflow (Apache Beam), Pub/Sub, Cloud Storage, Dataproc, Cloud Composer, Data Fusion, Bigtable vs Firestore vs Spanner, IAM.
 
-## Prep path (in order)
-1. **Official exam guide PDF** — `cloud.google.com/learn/certification/data-engineer` (read before anything else; it's scenario-based, ~50% first-pass pass rate)
-2. **Coursera: Google Cloud Data Engineering Professional Certificate** — canonical conceptual coverage + Qwiklabs
-3. **Google Cloud Skills Boost** (`cloudskillsboost.google`) — official practice questions + labs (the #1 thing candidates skip)
-4. **2+ timed mock exams** before the real test (Whizlabs, PassITExams)
+## Prep Path (in order)
+1. **Official exam guide PDF** — https://cloud.google.com/learn/certification/data-engineer
+   Read before anything else. The exam is scenario-based with ~50% first-attempt pass rate.
+2. **Coursera: Google Cloud Data Engineering Professional Certificate** — https://www.coursera.org/professional-certificates/gcp-data-engineering
+   Canonical conceptual coverage + Qwiklabs hands-on labs.
+3. **Google Cloud Skills Boost** — https://www.cloudskillsboost.google/paths/16
+   Official practice questions + labs. The #1 thing candidates skip.
+4. **2+ timed mock exams** before the real test (Whizlabs: https://www.whizlabs.com/google-cloud-certification-exams/data-engineer/)
 
-## What the exam actually tests
-- **Cost optimization** — BigQuery on-demand vs capacity, storage class selection, committed use discounts
+## What the Exam Actually Tests
+- **Cost optimization** — BigQuery on-demand vs capacity pricing, storage class selection (Nearline/Coldline/Archive), committed use discounts
 - **Service selection under constraints** — Bigtable vs Firestore vs Spanner tradeoffs (latency, consistency, cost, ops)
 - **Secure pipelines** — IAM least privilege, service accounts across storage/processing/analytics
 - **Design tradeoffs** — batch vs streaming, cost vs latency vs operational complexity
 
-## GitHub (hands-on)
-- `github.com/GoogleCloudPlatform/dataflow-templates` — real Beam pipeline templates
-- `github.com/GoogleCloudPlatform/professional-services` — real architecture solutions
+## Hands-on GitHub
+- **Dataflow Templates** — https://github.com/GoogleCloudPlatform/dataflow-templates
+  Real Beam pipeline templates.
+- **Professional Services** — https://github.com/GoogleCloudPlatform/professional-services
+  Real architecture solutions from Google's consulting teams.
 
 ## Milestone
 Build and secure a streaming pipeline: Pub/Sub ingestion → Dataflow/Beam processing → BigQuery sink, with IAM, monitoring, and cost optimization.
