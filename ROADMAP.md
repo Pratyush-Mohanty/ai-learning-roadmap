@@ -1,68 +1,113 @@
-# Roadmap - 6 Phases
+# Roadmap - 3-Month / 12-Week Plan
 
-Order matters: foundation -> building -> advanced. Each phase is 2-4 weeks and ends with a deployable project.
+Order matters: foundation -> build -> advanced. Every week has concrete output. Total ~12 weeks, roughly 10-15 focused hours per week.
 
-```mermaid
-flowchart LR
-    P0[P0 Cloud Foundations<br/>2-3 wks] --> P1[P1 AI/LLM Fundamentals<br/>3-4 wks]
-    P1 --> P2[P2 System Design<br/>4-6 wks parallel]
-    P2 --> P3[P3 LLM Engineering<br/>4-6 wks]
-    P3 --> P4[P4 GCP Data Engineering<br/>4-6 wks]
-    P4 --> P5[P5 Advanced<br/>ongoing]
+```
+W1-2  System Design + Cloud Foundations  (parallel, foundations)
+W3-4  AI / LLM Fundamentals
+W5-8  LLM Engineering  (flagship - RAG + agents)
+W9-11 GCP Data Engineering  (cert prep)
+W12   Advanced + polish  (vLLM, agents, portfolio)
 ```
 
-## Phase 0 - Cloud Foundations (2-3 weeks)
+---
 
-Get hands-on with GCP before anything else. Free credits make this low-risk.
+## Weeks 1-2 — System Design + Cloud Foundations (parallel)
 
-- Work through [topics/08-gcp-cloud-engineering.md](topics/08-gcp-cloud-engineering.md)
-- Google Cloud Skills Boost Cloud Engineer path (free credits included)
-- Take the **Associate Cloud Engineer** exam
-- **Project:** batch pipeline Cloud Storage -> BigQuery via Cloud Composer
+### System Design
+- [topics/01-system-design.md](topics/01-system-design.md) — the full 3-week guide; compress to 2 weeks
+- Read: scalability ladder, CAP, storage engines, caching, queues, consistency, availability
+- Whiteboard 4 designs out loud (URL shortener, rate limiter, chat, news feed)
+- Read DDIA chapters on replication + partitions
 
-## Phase 1 - AI/LLM Fundamentals (3-4 weeks)
+### Cloud Foundations
+- [topics/08-gcp-cloud-engineering.md](topics/08-gcp-cloud-engineering.md) — compute/networking/storage/IAM decision trees
+- Terraform basics: modules, state, plan/apply
+- Skills Boost Cloud Engineer path (free credits): https://www.cloudskillsboost.google/paths/11
 
-Understand how LLMs work so later decisions make sense.
+### Output this week
+- [ ] 4 whiteboarded designs, recorded
+- [ ] Terraform module deploying a service to Cloud Run behind a global LB
+- [ ] **Project:** batch pipeline Cloud Storage -> BigQuery via Composer
 
-- [topics/02-ai-llm-fundamentals.md](topics/02-ai-llm-fundamentals.md)
+---
+
+## Weeks 3-4 — AI / LLM Fundamentals
+
+- [topics/02-ai-llm-fundamentals.md](topics/02-ai-llm-fundamentals.md) — tokens, attention, training phases, inference concepts, eval, cost math
 - DeepLearning.AI LLM Engineering for Everyone (free): https://www.deeplearning.ai/short-courses/llm-engineering-for-everyone/
 - Optional math: Karpathy Zero to Hero: https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ
-- **Project:** notebook calling an LLM API, structured JSON extraction, rate limits, cost logging
+- Build your prompting + structured-output muscle: Instructor (https://github.com/instructor-ai/instructor)
 
-## Phase 2 - System Design (4-6 weeks, parallel)
+### Output this week
+- [ ] **Project:** notebook calling an LLM API — structured JSON extraction, retries, rate limits, cost logging
+- [ ] Golden dataset of 50 Q&A pairs you'll reuse for evals in Week 6
 
-Distributed systems reasoning. Your data background makes this fast.
+---
 
-- [topics/01-system-design.md](topics/01-system-design.md)
-- Read Designing Data-Intensive Applications (Kleppmann)
-- Whiteboard 10-12 classic designs out loud
-- **Project:** redesign a real past pipeline at 10x scale; explain tradeoffs
+## Weeks 5-6 — LLM Engineering: RAG
 
-## Phase 3 - LLM Engineering (4-6 weeks, highest priority)
+- [topics/03-llm-engineering.md](topics/03-llm-engineering.md) — the full 4-week guide; you have 2 weeks
+- Build RAG over your own documents: pgvector + LangChain/LlamaIndex
+- Chunking experiments (size, overlap, boundaries) — document the results
+- Hybrid search (vector + BM25), reranking, augmented prompt, citations
+- Add eval (RAGAS) + Langfuse tracing; record before/after baselines
+- Deploy as FastAPI with streaming (SSE)
 
-Ship production LLM apps. This is the skill that gets hired.
+### Output this week
+- [ ] **Flagship project v1:** deployed RAG app with eval + monitoring + citations
 
-- [topics/03-llm-engineering.md](topics/03-llm-engineering.md)
-- DataTalksClub llm-zoomcamp (free): https://github.com/DataTalksClub/llm-zoomcamp
-- Stack: LangChain -> pgvector -> Langfuse -> deploy with FastAPI
-- **Project:** RAG app over your documents with eval + monitoring
+---
 
-## Phase 4 - GCP Data Engineering (4-6 weeks)
+## Weeks 7-8 — LLM Engineering: Agents + Advanced
 
-Professional Data Engineer cert. Your existing data skills become certified.
+- [topics/04-ai-agents-advanced.md](topics/04-ai-agents-advanced.md) — agent loop, tool design, memory, orchestration patterns, guardrails, MCP/A2A
+- [topics/05-llm-optimization.md](topics/05-llm-optimization.md) — vLLM serving, quantization, prefix caching, speculative decoding
+- Build supervisor/worker system in LangGraph with checkpointing + memory
+- Serve the RAG app's model with vLLM; measure TTFT/throughput before/after optimization
 
-- [topics/07-gcp-data-engineering.md](topics/07-gcp-data-engineering.md)
-- Official exam guide -> Coursera cert -> Skills Boost practice -> 2 timed mocks
-- **Project:** streaming pipeline Pub/Sub -> Dataflow -> BigQuery with IAM + cost optimization
+### Output this week
+- [ ] **Flagship project v2:** supervisor/worker agent system with guardrails + eval
+- [ ] vLLM benchmark notes (FP8, prefix cache, spec decode measured)
 
-## Phase 5 - Advanced (ongoing)
+---
 
-Differentiate on the hard problems: serving efficiency and multi-agent systems.
+## Weeks 9-11 — GCP Data Engineering (Professional Data Engineer cert)
 
-- [topics/05-llm-optimization.md](topics/05-llm-optimization.md) - vLLM, quantization, speculative decoding
-- [topics/04-ai-agents-advanced.md](topics/04-ai-agents-advanced.md) - LangGraph, memory, guardrails
-- [topics/06-cloud-data-engineering-advanced.md](topics/06-cloud-data-engineering-advanced.md) - lakehouse, CDC, streaming patterns
-- **Project:** serve an LLM with vLLM and measure optimization gains; build a supervisor/worker multi-agent system
+- [topics/07-gcp-data-engineering.md](topics/07-gcp-data-engineering.md) — BigQuery internals, BigLake + Iceberg, Dataflow, Pub/Sub, Composer vs Dataform, security
+- [topics/06-cloud-data-engineering-advanced.md](topics/06-cloud-data-engineering-advanced.md) — lakehouse, batch vs streaming, CDC, data quality
+- Official exam guide: https://cloud.google.com/learn/certification/data-engineer
+- Skills Boost practice labs: https://www.cloudskillsboost.google/paths/16
+- Coursera cert (optional, weeknights): https://www.coursera.org/professional-certificates/gcp-data-engineering
+- 2 timed mock exams (Whizlabs) in week 11
+
+### Output this week
+- [ ] **Project:** streaming pipeline Pub/Sub -> Dataflow -> BigQuery with windows/watermarks + IAM + cost monitoring
+- [ ] **Project:** BigLake Iceberg lakehouse ingested via Storage Write API, queried by Spark + BigQuery
+- [ ] Gemini in BigQuery demo (LLM inside the warehouse)
+- [ ] Pass the Professional Data Engineer exam (or be booked)
+
+---
+
+## Week 12 — Advanced + Portfolio Polish
+
+- [topics/06-cloud-data-engineering-advanced.md](topics/06-cloud-data-engineering-advanced.md) — dbt, CDC, data contracts
+- [topics/05-llm-optimization.md](topics/05-llm-optimization.md) — finish vLLM / SGLang deep dive
+- Optional: schedule Professional Cloud Architect (another 4-5 weeks after this plan)
+
+### Output this week
+- [ ] Portfolio: every project has README + architecture diagram + demo
+- [ ] Write one post per flagship project (teach to retain)
+- [ ] Repos published to your GitHub profile
+
+---
+
+## If You Need to Cut (keep these)
+
+1. **Weeks 5-6 RAG project** — the single highest-value deliverable
+2. **Weeks 7-8 agent project** — the differentiator
+3. **Professional Data Engineer cert** — validates your existing data skills
+4. **Cloud foundations project** — cheap but keeps GCP skills sharp
 
 ## Principles
 
