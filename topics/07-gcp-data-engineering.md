@@ -1,81 +1,119 @@
-# GCP Data Engineering — Advanced (Professional Data Engineer)
+# GCP Data Engineering (Professional Data Engineer)
 
-How GCP implements the modern data platform, plus exam strategy. The exam is **scenario-based**: it tests *which service under which constraint*, not memorization.
+The exam is **scenario-based**: it tests *which service under which constraint*. Learn the platform shape, then the tradeoffs.
 
-## 1. The GCP Data Stack (map of the platform)
+## The GCP Data Platform in One Diagram
+
+```mermaid
+flowchart LR
+    subgraph Sources
+        A[OLTP / CDC]
+        B[Logs / events]
+        C[SaaS apps]
+    end
+    subgraph Ingestion
+        PS[Pub/Sub - streaming]
+        GCS[Cloud Storage - batch]
+    end
+    A --> PS
+    B --> PS
+    C --> GCS
+    PS --> DF[Dataflow - Beam stream+batch]
+    GCS --> DP[Dataproc - Spark/Hive]
+    GCS --> DF
+    subgraph Lakehouse
+        BL[BigLake over Iceberg on GCS]
+    end
+    DF --> BL
+    DP --> BL
+    BL --> BQ[BigQuery - warehouse]
+    BQ --> VX[Vertex AI / Gemini in BigQuery]
+    COM[Cloud Composer - orchestrate] -.all steps.- DF
+    COM -.all steps.- DP
+    COM -.all steps.- BQ
 ```
-Sources → Pub/Sub (stream) / Cloud Storage (batch) / Kafka (Managed)
-  → Dataflow (Beam, stream+batch) · Dataproc (Spark/Hive) · Data Fusion (GUI ETL)
-  → Storage & Query: BigQuery (warehouse) · BigLake (lakehouse on GCS) · Bigtable (NoSQL)
-  → Orchestration: Cloud Composer (Airflow) · Dataform (SQL transform)
-  → Governance: Dataplex · Data Catalog · DLP (data loss prevention)
-  → ML/AI: Vertex AI · BigQuery ML · Gemini in BigQuery
+
+## BigQuery - the center of gravity
+
+- Serverless petabyte warehouse. Columnar, separate compute/storage, **slots** for concurrency.
+- **Partitioning** (by date, prunes bytes = cost) vs **clustering** (co-locates similar values, faster). Partition for cost, cluster for speed.
+- **Slots:** on-demand (pay per query) vs capacity (reserved + autoscaling). Cost questions always involve this.
+- **Storage lifecycle:** active -> long-term (90-day discount) -> Iceberg managed tables / BigLake external.
+- **Real-time:** Storage Write API (gRPC). The modern ingest path.
+- **BigQuery ML / Gemini in BigQuery:** train models + run LLM analytics in SQL. Your differentiator.
+
+## BigLake + Iceberg = the GCP lakehouse
+
+```mermaid
+flowchart LR
+    GCS[(GCS - Iceberg files)] <--> META[BigLake Metastore<br/>REST catalog]
+    META <--> BQ[BigQuery]
+    META <--> SP[Spark / Flink / Trino]
+    META <--> PLX[Dataplex - governance]
+    META <--> VX[Vertex AI - ML]
 ```
 
-## 2. BigQuery — the center of gravity
-- **What it is:** serverless, petabyte-scale warehouse with columnar storage (Capacitor), separate compute/storage, **slots** for query concurrency.
-- **Key decisions to master:**
-  - **Partitioning** (by date/column → prune scanned bytes = cost) vs **clustering** (co-locate similar values → faster, cheaper reads). Partition for cost, cluster for speed.
-  - **Slot management:** on-demand (pay per query) vs **capacity** (reserved slots + autoscaling). Cost questions always involve this.
-  - **Storage lifecycle:** active vs long-term (90-day discount) vs BigLake external tables vs Iceberg managed tables.
-  - **Speed up:** materialized views, `SELECT * EXCEPT`, avoiding UDF overhead, BI engine (optional, legacy).
-  - **Real-time:** Storage Write API (gRPC streaming) — the modern ingest path.
-- **BigQuery ML / Gemini in BigQuery:** train models + run LLM analytics **in SQL**. Your differentiator as a data engineer: *"call a model inside the warehouse"* — do a Gemini-in-BigQuery project.
+**Why it matters:** ACID, schema evolution, time travel, auto-clustering, streaming via Storage Write API, column-level security, multi-engine access - all open format. **This is the modern lakehouse on GCP. Know this architecture.**
 
-## 3. BigLake + Iceberg = the GCP lakehouse (2026 default)
-- **BigLake** = a bridge: external tables over GCS with fine-grained security, no data copy (non-extract-load pattern).
-- **Apache Iceberg managed tables in BigQuery:** open table format with ACID, **schema evolution, time travel, auto-clustering, streaming via Storage Write API, column-level security, multi-engine access** (Spark, Flink, Trino, BigQuery all read the same table). Multi-table transactions (GA).
-- **The GCP Iceberg stack:** GCS (files) + BigLake Metastore (REST catalog) + BigQuery (query) + Dataplex (governance) + Vertex AI (ML). This is what a modern "lakehouse on GCP" looks like — know this architecture for both interviews and cert.
+## Dataflow (Apache Beam)
 
-## 4. Dataflow (Apache Beam) — streaming & batch
-- **Model:** pipeline of transforms; same code for batch + stream (portability).
-- **Runner v2, Streaming Engine, Shuffle Service:** the managed execution layers — know what each does.
-- **Streaming concepts tested:** windows (tumbling/sliding/session), **watermarks**, late-data triggers, side inputs.
-- **Beam SDK skills:** ParDo, GroupByKey/Combine, state/timers (for joins/dedup at scale), I/O connectors (Pub/Sub, Kafka, BigQuery, GCS, Iceberg).
+- Same code for batch + stream. Runner v2, Streaming Engine, Shuffle Service.
+- **Streaming concepts tested:** windows (tumbling/sliding/session), watermarks, late data, side inputs.
+- **SDK skills:** ParDo, GroupByKey/Combine, state/timers, I/O connectors (Pub/Sub, Kafka, BigQuery, GCS, Iceberg).
 
-## 5. Pub/Sub (and when it's the right choice)
-- Push vs pull; **exactly-once delivery** (2024+); ordering with message ordering; subscriber throughput vs `max_outstanding_messages`; **dead-letter topics** for poison messages; retries + backoff.
-- **Alternatives:** Kafka (Managed) when you need partitioning/retention/replay semantics; Pub/Sub for managed event delivery without consumer state.
+## Composer vs Dataform
 
-## 6. Orchestration: Composer vs Dataform
-- **Cloud Composer (Airflow):** orchestrate external steps (Spark job → validation → dbt run → send notification). Retries, SLA checks, task dependencies. Heavy infra (GKE under the hood).
-- **Dataform:** **SQL-based ELT** in BigQuery — versioned, tested, with environments (dev/staging/prod). The "dbt for GCP." Use for in-warehouse transforms; Composer for cross-service orchestration.
+| | Cloud Composer (Airflow) | Dataform |
+|---|---|---|
+| What | Orchestrate external steps | SQL ELT in BigQuery |
+| Use for | Cross-service workflows | In-warehouse transforms |
+| Model | Python DAGs, retries, SLAs | Versioned, tested SQL, environments |
 
-## 7. Dataproc (Spark) vs Dataflow — the classic exam question
+## The Classic Tradeoff Questions
+
+### Dataflow vs Dataproc
 | Dimension | Dataflow | Dataproc |
 |---|---|---|
-| Model | Beam (managed, serverless) | Spark/Hadoop (cluster) |
-| Ops | No cluster to manage | You manage (or use Serverless) |
+| Model | Beam, serverless | Spark/Hadoop, cluster |
+| Ops | None to manage | You manage |
 | Cost | Pay per work | Pay for cluster time |
-| Best for | Streaming, GCP-native, portability | Existing Spark/Hive skills, ML training pre-processing |
-Use Dataflow for greenfield streaming; Dataproc when you already run Spark or need on-prem portability.
+| Best for | Streaming, greenfield, portability | Existing Spark skills, ML pre-processing |
 
-## 8. Bigtable vs Firestore vs Spanner (the storage tradeoff question)
-- **Bigtable:** wide-column NoSQL, **millisecond latency, millions of QPS, single key, high write throughput** — for Hot-write analytics/ads/telemetry. Not a relational system. LSM-based.
-- **Firestore:** document, mobile/web apps, strong consistency, managed, autoscaling.
-- **Spanner:** **globally distributed relational** with SQL + external consistency (CP at planetary scale). When you need relational semantics + horizontal scale across regions. Expensive.
-- Rule: relational + global → Spanner. Relational + single-region → Cloud SQL/AlloyDB. Wide-column + high QPS → Bigtable. App/mobile → Firestore.
+### Bigtable vs Firestore vs Spanner
 
-## 9. Security & Governance (exam-heavy)
-- **IAM:** least privilege, **service accounts** (never user keys in code), workload identity federation.
-- **Column-level security** + **data masking** + DLP for PII (DICOM/medical scenarios).
-- **Dataplex:** catalog, lineage, data quality, policy across lake+warehouse.
-- **VPC-SC** for data exfiltration control; **CMEK/CSEK** encryption keys.
+```mermaid
+flowchart TD
+    Q{Need?} -->|Relational + global scale| S[Spanner - SQL + external consistency]
+    Q -->|Wide-column, millions QPS, millisecond| B[Bigtable - single-key, LSM]
+    Q -->|Mobile/web app document| F[Firestore - autoscaling]
+    Q -->|Relational + single region| C[Cloud SQL / AlloyDB]
+```
 
-## 10. Exam Strategy (from the ~50% first-pass rate)
-- Read the **official exam guide** first: https://cloud.google.com/learn/certification/data-engineer
-- Coursera *Google Cloud Data Engineering Professional Certificate*: https://www.coursera.org/professional-certificates/gcp-data-engineering
-- **Google Cloud Skills Boost** practice + labs: https://www.cloudskillsboost.google/paths/16 (the #1 thing candidates skip)
-- Do **2+ timed mock exams** (Whizlabs). It's scenario-based — practice *eliminating* wrong options under a reason: "this fails on cost/latency/consistency."
-- Get hands-on — candidates who only did courses fail the applied scenarios.
+## Security & Governance (exam-heavy)
 
-## 11. Your Differentiators (data engineer)
-- **Iceberg + BigLake** — build the lakehouse; nobody in the room will know it better
-- **Gemini in BigQuery** — LLM + warehouse in one demo
-- **Streaming with correct windowing/watermarks** — show you understand the hard 20%
+- **IAM least privilege**, service accounts, workload identity
+- **Column-level security + data masking + DLP** for PII
+- **Dataplex:** catalog, lineage, quality, policies
+- **VPC-SC** (exfiltration control), CMEK/CSEK encryption
+
+## Exam Strategy
+
+1. Read the official exam guide: https://cloud.google.com/learn/certification/data-engineer
+2. Coursera cert: https://www.coursera.org/professional-certificates/gcp-data-engineering
+3. Skills Boost practice + labs: https://www.cloudskillsboost.google/paths/16 (the #1 thing people skip)
+4. 2+ timed mock exams. Practice *eliminating* wrong options: "this fails on cost/latency/consistency."
+5. Get hands-on - courses alone won't pass it.
+
+## Your Differentiators
+
+- **Iceberg + BigLake** - build the lakehouse
+- **Gemini in BigQuery** - LLM + warehouse in one demo
+- **Correct windowing/watermarks** - show you know the hard 20%
 
 ## Go Deeper
-- **Official docs:** BigQuery — https://cloud.google.com/bigquery/docs · Iceberg in BigQuery — https://cloud.google.com/bigquery/docs/biglake-iceberg-tables-in-bigquery
-- **Repos:** dataflow-templates → https://github.com/GoogleCloudPlatform/dataflow-templates · professional-services → https://github.com/GoogleCloudPlatform/professional-services
-- **Course:** DataCamp Google Cloud Data Engineer track → https://www.datacamp.com/tracks/google-cloud-data-engineer
-- **Architecture refs:** Google Cloud architecture center — https://cloud.google.com/architecture
+
+- BigQuery docs: https://cloud.google.com/bigquery/docs
+- Iceberg in BigQuery: https://cloud.google.com/bigquery/docs/biglake-iceberg-tables-in-bigquery
+- Dataflow templates: https://github.com/GoogleCloudPlatform/dataflow-templates
+- Professional services: https://github.com/GoogleCloudPlatform/professional-services
+- DataCamp track: https://www.datacamp.com/tracks/google-cloud-data-engineer
